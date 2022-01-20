@@ -1,0 +1,249 @@
+﻿@inject SignInManager<AppUser> _signInManager
+@inject IIdentityService _identityService
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description"
+          content="Start your development with a Dashboard for Bootstrap 4." />
+    <meta name="author" content="Creative Tim" />
+    <title>Leadx</title>
+    <!-- Favicon -->
+    <link rel="icon" href="~/dashboard/img/favicon.png" type="image/png" />
+    <!-- Fonts -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" />
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="~/dashboard/vendor/nucleo/css/nucleo.css"
+          type="text/css" />
+    <link rel="stylesheet"
+          href="~/dashboard/vendor/@@fortawesome/fontawesome-free/css/all.min.css"
+          type="text/css" />
+    <!-- Page plugins -->
+    <!-- Argon CSS -->
+    <link rel="stylesheet"
+          href="~/dashboard/css/argon.css?v=1.2.0"
+          type="text/css" />
+
+    <link rel="stylesheet"
+          href="~/dashboard/css/site.css"
+          type="text/css" />
+
+    <link rel="stylesheet"
+          href="~/dashboard/lib/toastr/toastr.min.css"
+          type="text/css" />
+    <style>
+        @@font-face {
+            font-family: sansBlack;
+            src: url("../../../dashboard/fonts/SiemensSans-Black.woff");
+        }
+
+        @@font-face {
+            font-family: sansBold;
+            src: url("../../../dashboard/fonts/SiemensSans-Bold.woff");
+        }
+
+        p {
+            margin-bottom: 6px;
+        }
+
+        hr {
+            color: gray;
+            height: 2px;
+            width: 95%;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .pagination {
+            display: inline-block;
+        }
+
+            .pagination a {
+                color: black;
+                float: left;
+                padding: 8px 16px;
+                text-decoration: none;
+                border: 1px solid #ddd;
+            }
+
+                .pagination a.active {
+                    background-color: #EC6602;
+                    color: white;
+                    border: 1px solid #EC6602;
+                }
+
+                .pagination a:hover:not(.active) {
+                    background-color: #ddd;
+                }
+
+                .pagination a:first-child {
+                    border-top-left-radius: 5px;
+                    border-bottom-left-radius: 5px;
+                }
+
+                .pagination a:last-child {
+                    border-top-right-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                }
+    </style>
+    @RenderSection("Styles", false)
+</head>
+
+<body>
+    <!-- Sidenav -->
+    <nav class="
+        sidenav
+        navbar navbar-vertical
+        fixed-left
+        navbar-expand-xs navbar-light
+        bg-white
+      "
+         id="sidenav-main">
+        <div class="scrollbar-inner">
+            <!-- Brand -->
+            <div class="sidenav-header align-items-center">
+                <a class="navbar-brand" asp-action="List" asp-controller="DashboardLeads">
+                    <img src="~/dashboard/img/ic_logo_header.svg"
+                         class="navbar-brand-img"
+                         alt="Siemens - LeadX" />
+                </a>
+            </div>
+            <div class="navbar-inner">
+                <!-- Collapse -->
+                <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+                    <!-- Nav items -->
+                    <ul class="navbar-nav">
+                        @if (_signInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="@(ViewContext.RouteData.Values["Controller"].ToString() == "DashboardLeads" && ViewContext.RouteData.Values["Action"].ToString() == "List" ? "nav-link active" : "nav-link")"
+                                   asp-controller="DashboardLeads" asp-action="List"
+                                   asp-route-page_number="0">
+                                    <i class="ni ni-tv-2 text-primary"></i>
+                                    <span class="nav-link-text">Leads</span>
+                                </a>
+                            </li>
+                            @if (await _identityService.IsUserInRole(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value, DefaultRoles.ADMIN.ToString()))
+                            {
+                                <li class="nav-item">
+                                    <a class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Users" && ViewContext.RouteData.Values["Action"].ToString() == "List" ? "nav-link active" : "nav-link")"
+                                       asp-controller="Users" asp-action="List"
+                                       asp-route-page_number="0">
+                                        <i class="fas fa-users text-orange"></i>
+                                        <span class="nav-link-text">Users</span>
+                                    </a>
+                                </li>
+                            }
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Main content -->
+    <div class="main-content" id="panel">
+        <!-- Topnav -->
+        <nav class="
+          navbar navbar-top navbar-expand navbar-dark
+          bg-primary
+          border-bottom
+        ">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Navbar links -->
+                    @if (_signInManager.IsSignedIn(User))
+                    {
+                        <ul class="navbar-nav align-items-center ml-md-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link pr-0"
+                                   href="#"
+                                   role="button"
+                                   data-toggle="dropdown"
+                                   aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <div class="media align-items-center">
+                                        <span class="avatar avatar-sm rounded-circle">
+                                            <img alt="Image placeholder"
+                                                 src="~/dashboard/img/user_icon.jpg" />
+                                        </span>
+                                        <div class="media-body ml-2 d-none d-lg-block">
+                                            <span class="mb-0 text-sm font-weight-bold">
+                                                @{
+                                                    var givenNameClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName);
+                                                    if (givenNameClaim == null)
+                                                         @User.Identity.Name
+                                                    else
+                                                    {
+                                                         @givenNameClaim.Value
+                                                    }
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <form method="post" asp-action="Logout" asp-controller="Home">
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="ni ni-user-run"></i>
+                                            <span>Logout</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        </ul>
+                    }
+
+                </div>
+            </div>
+        </nav>
+        <!-- Header -->
+        <!-- Header -->
+        <div class="header pb-6 mt-5">
+            <div class="container-fluid">
+                <div class="header-body">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        <!-- Page content -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-8"></div>
+                <div class="col-xl-4">
+                    <div class="card"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Argon Scripts -->
+    <!-- Core -->
+    <script src="~/dashboard/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="~/dashboard/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/dashboard/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/dashboard/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/dashboard/vendor/js-cookie/js.cookie.js"></script>
+    <script src="~/dashboard/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+    <script src="~/dashboard/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+    <script src="~/dashboard/lib/toastr/toastr.min.js"></script>
+    <!-- Argon JS -->
+    <script src="~/dashboard/js/argon.js?v=1.2.0"></script>
+    <script type="text/javascript">
+        toastr.options = {
+            "debug": false,
+            "positionClass": "toast-bottom-left",
+            "onclick": null,
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 5000,
+            "extendedTimeOut": 1000
+        };
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

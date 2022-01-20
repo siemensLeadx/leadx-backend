@@ -1,0 +1,117 @@
+﻿@inject SignInManager<AppUser> _signInManager
+@inject IIdentityService _identityService
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebApplication3</title>
+    <link rel="stylesheet" href="~/dashboard/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/dashboard/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Siemens - LeadX</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    @if (_signInManager.IsSignedIn(User))
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="DashboardLeads" asp-action="List"
+                                   asp-route-page_number="0">Leads</a>
+                            </li>
+                            @if (await _identityService.IsUserInRole(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value, DefaultRoles.ADMIN.ToString()))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Users" asp-action="List"
+                                       asp-route-page_number="0">Users</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+
+                    @*@Localizer.Get(ResourceKeys.LeadName)*@
+                    <ul class="navbar-nav ml-auto">
+                        @if (_signInManager.IsSignedIn(User))
+                        {
+
+                            <li class="nav-item">
+                                <form method="post" asp-action="Logout" asp-controller="Home">
+                                    <button type="submit" class="btn btn-link" style="color: firebrick">
+                                        Logout @User.Identity.Name
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <form asp-action="ExternalLogin" asp-controller="Home" asp-route-returnUrl="@string.Empty">
+                                    <button name="provider" value="Microsoft" type="submit" class="btn btn-link">
+                                        Login with Microsoft account
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        @{
+                            string currentController = ViewContext.RouteData.Values["Controller"].ToString();
+                            string currentAction = ViewContext.RouteData.Values["Action"].ToString();
+                            string currentId = ViewContext.RouteData.Values["id"]?.ToString();
+                        }
+
+                        @if (Localizer.CurrentLangWithCountry.Contains(KeyValueConstants.Arabic))
+                        {
+                            <li>
+                                <a class="btn btn-link"
+                                   asp-controller=@currentController
+                                   asp-action=@currentAction asp-route-lang="en"
+                                   asp-route-id="@currentId">
+                                    English
+                                </a>
+                            </li>
+
+                        }
+                        else
+                        {
+                            <li>
+                                <a asp-controller=@currentController
+                                   asp-action=@currentAction
+                                   asp-route-lang="ar"
+                                   asp-route-id="@currentId"
+                                   class="btn btn-link">عربي</a>
+                            </li>
+
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; @DateTime.Now.Year - Siemens - LeadX
+        </div>
+    </footer>
+    <script src="~/dashboard/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/dashboard/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/dashboard/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/dashboard/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/dashboard/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,91 @@
+﻿@model WebApi.ViewModels.AddUserVM
+
+@{
+    ViewData["Title"] = "LeadX - Add User";
+}
+
+<div class="row">
+    <div class="col-md-8 m-auto">
+        <div class="card">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h3 class="mb-0">New User </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <form asp-action="Add" method="post">
+                    <div class="pl-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-first-name">First name</label>
+                                    <input asp-for="first_name" type="text" id="input-first-name" class="form-control" placeholder="First name">
+                                    <span asp-validation-for="first_name" class="text-danger small font-weight-bold"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-last-name">Last name</label>
+                                    <input asp-for="last_name" type="text" id="input-last-name" class="form-control" placeholder="Last name">
+                                    <span asp-validation-for="last_name" class="text-danger small font-weight-bold"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-email">Email address</label>
+                                    <input asp-for="email" type="email" id="input-email" class="form-control" placeholder="jesse@example.com">
+                                    <span asp-validation-for="email" class="text-danger small font-weight-bold"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-control-label" for="role">Role</label>
+
+                                    <select id="role" class="form-control"
+                                            name="role"
+                                            asp-for="role"
+                                            asp-items="@(new SelectList(ViewBag.roles, "id", "name"))">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: center; margin: 20px;">
+                            <div class="text-right">
+                                <button class="btn btn-sm btn-primary"
+                                        style="padding: 10px;">
+                                    Save
+                                </button>
+                                <a class="btn btn-sm btn-light" style="padding: 10px;" asp-action="List">Back to List</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        @{
+            if (TempData["isSuccess"] != null && TempData["message"] != null)
+            {
+                var isSuccess = (bool)TempData["isSuccess"];
+                if (isSuccess)
+                {
+                    @:toastr.success("@TempData["message"]");
+                }
+                else
+                {
+                    @:toastr.error("@TempData["message"]");
+                }
+            }
+        }
+    </script>
+}
+
+

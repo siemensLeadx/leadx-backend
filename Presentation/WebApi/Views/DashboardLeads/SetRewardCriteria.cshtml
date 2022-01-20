@@ -1,0 +1,48 @@
+﻿@model WebApi.ViewModels.SetLeadRewardVM
+
+@{
+    ViewData["Title"] = "SetRewardCriteria";
+}
+
+<h3>Set Reward - @ViewBag.header</h3>
+<hr />
+@if (TempData["isSuccess"] != null && TempData["message"] != null)
+{
+    var isSuccess = (bool)TempData["isSuccess"];
+    var alertClass = isSuccess ? "alert-info" : "alert-danger";
+    <div class="alert @alertClass">@TempData["message"]</div>
+}
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SetRewardCriteria" method="post">
+            <input type="hidden" asp-for="lead_id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label class="control-label">Reward Class</label>
+                <select id="reward_class_id" class="form-control"
+                        name="reward_class_id"
+                        asp-for="reward_class_id"
+                        asp-items="@(new SelectList(ViewBag.rewardClasses, "id", "name"))">
+                    <option value="">--Select--</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Reward Criteria</label>
+                <select id="reward_criteria_id" class="form-control"
+                        name="reward_criteria_id"
+                        asp-for="reward_criteria_id"
+                        asp-items="@(new SelectList(ViewBag.rewardCriterias, "id", "name"))">
+                    <option value="">--Select--</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Details" asp-route-id="@Model.lead_id" class="btn btn-dark">Back to lead</a>
+            </div>
+        </form>
+    </div>
+</div>
+

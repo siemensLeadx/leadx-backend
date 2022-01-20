@@ -1,0 +1,38 @@
+﻿@model WebApi.ViewModels.ChangeLeadStatusVM
+
+@{
+    ViewData["Title"] = "ChangeStatus";
+}
+
+<h3>Change Status  - @ViewBag.header</h3>
+<hr />
+@if (TempData["isSuccess"] != null && TempData["message"] != null)
+{
+    var isSuccess = (bool)TempData["isSuccess"];
+    var alertClass = isSuccess ? "alert-info" : "alert-danger";
+    <div class="alert @alertClass">@TempData["message"]</div>
+}
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ChangeStatus" method="post">
+            <input asp-for="lead_id" type="hidden" />
+            <div class="form-group">
+                <label class="control-label">Status</label>
+                <select id="status_id" class="form-control"
+                        name="status_id"
+                        asp-for="status_id"
+                        asp-items="@(new SelectList(ViewBag.leadStatuses, "id", "name"))">
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Details" asp-route-id="@Model.lead_id" class="btn btn-dark">Back to lead</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+
+</div>
+

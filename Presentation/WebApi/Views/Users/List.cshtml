@@ -1,0 +1,180 @@
+﻿@model WebApi.ViewModels.UserListVM
+
+@{
+    ViewData["Title"] = "LeadX - Users";
+}
+
+<div class="row">
+    <div class="col-xl-10 m-auto">
+        <form asp-action="List" method="get">
+            <div class="row">
+                <div class="form-group col-xl-5">
+                    <div class="input-group input-group-alternative input-group-merge">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                        </div>
+                        <input class="form-control"
+                               placeholder="Search by name/email"
+                               name="name" value="@ViewBag.CurrentFilter"
+                               type="text" />
+                    </div>
+                </div>
+                <div class="form-group col-xl-5">
+                    <select class="form-control" id="role" name="role"
+                            asp-for="role" asp-items="@(new SelectList(ViewBag.roles, "id", "name"))">
+                        <option value="">All Roles</option>
+                    </select>
+                </div>
+                <div class="form-group col-xl-2">
+                    <input type="submit" value="Search" class="btn btn-primary mb-2" />
+                </div>
+            </div>
+
+        </form>
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h3 class="mb-0">Users</h3>
+                    </div>
+                    <div class="col text-right">
+                        <a asp-action="Add" class="btn btn-sm btn-primary">Add User</a>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <!-- Projects table -->
+
+                <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.ListWithPagination.Data)
+                        {
+                            <tr id="user_row_@item.id">
+                                <th scope="row">
+                                    @item.first_name
+                                </th>
+                                <td>
+                                    @item.last_name
+                                </td>
+                                <td>
+                                    @item.email
+                                </td>
+                                <td>
+                                    @item.role
+                                </td>
+                                <td style="display: flex; justify-content: space-around;">
+                                    <a asp-action="Edit" asp-route-id="@item.id">
+                                        <i class="fa fa-edit" style="color: #1919e3"></i>
+                                    </a>
+                                    @if (item.role_alias != DefaultRoles.ADMIN.ToString())
+                                    {
+                                        <a class="deleteBtn" href="#" id="@item.id"
+                                           firstName="@item.first_name @item.last_name"
+                                           data-toggle="modal" data-target="#deleteUserModal">
+                                            <i class="fa fa-trash" style="color: red;"></i>
+                                        </a>
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <input type="hidden" id="deletedUserId" />
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="exampleModalLabel">Delete <span id="deleted_first_name"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this user?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" onclick="deleteUser()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+@if (Model.ListWithPagination.Data.Count() == 0)
+{
+    <h3 style="text-align: center"><i>No data found</i></h3>
+}
+<div class="row">
+    <div class="col-xl-8 col-md-8 m-auto pagination"
+         style="display: flex; justify-content: center;">
+        <div>
+            <a asp-action="List"
+               asp-route-page_number="1"
+               asp-route-name="@ViewBag.CurrentFilter"
+               asp-route-role="@Model.role">&laquo;</a>
+            @for (var i = 1; i <= Model.ListWithPagination.Meta.TotalPages; i++)
+            {
+                var currentDisabled = Model.ListWithPagination.Meta.PageIndex == i ? "pointer-events: none" : "";
+                var currentClass = Model.ListWithPagination.Meta.PageIndex == i ? "active" : "";
+                <a asp-action="List"
+                   asp-route-page_number="@i"
+                   asp-route-name="@ViewBag.CurrentFilter"
+                   asp-route-role="@Model.role"
+                   class="@currentClass" style="@currentDisabled">@i</a>
+            }
+            <a asp-action="List"
+               asp-route-page_number="@Model.ListWithPagination.Meta.TotalPages"
+               asp-route-name="@ViewBag.CurrentFilter"
+               asp-route-role="@Model.role">&raquo;</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(".deleteBtn").on("click", function () {
+            $("#deletedUserId").val($(this).attr('id'));
+            $("#deleted_first_name").html($(this).attr('firstName'));
+        })
+
+        var deleteUser = function () {
+            var id = $('#deletedUserId').val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Delete","Users")',
+                data:{id: id},
+                success: function (result) {
+                    $("#deleteUserModal").modal('hide');
+                    $("#user_row_" + id).remove();
+                    if (result.is_success) {
+                        toastr.success(result.message);
+                    } else {
+                        toastr.error(result.message);
+                    }
+                },
+                error: function () {
+                    $("#deleteUserModal").modal('hide');
+                    toastr.error("please try again or contact administrator", "An error has occurred");
+                }
+            });
+       }
+    </script>
+}

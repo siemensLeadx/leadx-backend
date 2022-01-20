@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:WebApi.Controllers.v1.LeadsController.CreateNewLead(Application.Features.Leads.Commands.CreateLead.Command)">
+            <summary>
+            Add new lead
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+                 
+        </member>
+        <member name="M:WebApi.Controllers.v1.LeadsController.GetUserLeads(System.Int32,System.Int32,System.String)">
+            <summary>
+            Get user leads list ordered by creation date decending
+            </summary>
+            <param name="page_number"></param>
+            <param name="page_size"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.LeadsController.GetUserLeadDetails(System.Int64)">
+            <summary>
+            Get user lead details
+            </summary>
+            <param name="lead_id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.LookupsController.GetBusinessOpportunities">
+            <summary>
+            Get business opportunities lookup data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.LookupsController.GetCustomerStatus">
+            <summary>
+            Get customer status lookup data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.LookupsController.GetNeededDevices">
+            <summary>
+            Get lead devices lookup data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.UserDevicesController.AddUpdateDevice(Application.Features.UserAccount.Commands.AddUpdateUserDevice.Command)">
+            <summary>
+            Add / update user device token
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.UserDevicesController.RemoveDevice(Application.Features.UserAccount.Commands.RemoveUserDevice.Command)">
+            <summary>
+            Remove user device token
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.UsersController.Register(Application.Features.UserAccount.Commands.Register.Command)">
+            <summary>
+            Register new user account
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+            
+        </member>
+        <member name="M:WebApi.Controllers.v1.UsersController.VerifyAccount(Application.Features.UserAccount.Commands.VerifyAccount.Command)">
+            <summary>
+            Verify user account after registeration
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+            
+        </member>
+        <member name="M:WebApi.Controllers.v1.UsersController.Login(Application.Features.UserAccount.Commands.Login.Command)">
+            <summary>
+            Login request
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+            
+        </member>
+        <member name="M:WebApi.Controllers.v1.UsersController.ForgetPassword(Application.Features.UserAccount.Commands.ForgetPassword.Command)">
+            <summary>
+            Forget password request
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+            
+        </member>
+        <member name="M:WebApi.Controllers.v1.UsersController.ResetPassword(Application.Features.UserAccount.Commands.ResetPassword.Command)">
+            <summary>
+            Reset password request
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+            
+        </member>
+        <member name="M:WebApi.Controllers.v1.UsersController.UpdateProfile(Application.Features.UserAccount.Commands.UpdateProfile.Command)">
+            <summary>
+            Update user profile
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.UsersController.GenerateIPAddress">
+            <summary>
+            Get paginated list of users 
+            </summary>
+            <param name="name"></param>
+            <param name="sort"></param>
+            <param name="page_number"></param>
+            <param name="page_size"></param>
+            <returns></returns>
+            
+        </member>
+        <member name="M:WebApi.Controllers.v1.UsersController.GetUserNotifications(System.Int32,System.Int32)">
+            <summary>
+            Get user notification list
+            </summary>
+            <param name="page_number"></param>
+            <param name="page_size"></param>
+            <returns></returns>
+                  
+        </member>
+    </members>
+</doc>

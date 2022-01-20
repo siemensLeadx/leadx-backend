@@ -1,0 +1,395 @@
+﻿@inject IIdentityService _identityService
+
+@model Result<Application.Features.Leads.Queries.GetDashboardLeadDetails.DashboardLeadDetailsResponseDTO>
+
+@{
+    ViewData["Title"] = "LeadX - Lead Details";
+}
+
+@section Styles{
+    <style>
+        @@font-face {
+            font-family: sansBlack;
+            src: url("../../../fonts/SiemensSans-Black.woff");
+        }
+
+        @@font-face {
+            font-family: sansBold;
+            src: url("../../../fonts/SiemensSans-Bold.woff");
+        }
+
+        .label {
+            color: rgb(153, 149, 149);
+            font-size: 14px;
+            font-family: sansBold;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .lead-data {
+            font-family: sansBlack;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0;
+        }
+
+        hr {
+            margin-top: 8px;
+            margin-bottom: 8px;
+            width: 100%
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+    </style>
+}
+
+<input type="hidden" asp-for="Data.lead_id" id="lead_id" />
+
+<div class="row">
+    <div class="col-xl-7 col-md-7">
+        <h2>Information</h2>
+        <div class="card">
+            <!-- Card body -->
+            <div class="card-body">
+                <div>
+                    <p class="label">Lead Name </p>
+                    <p class="lead-data">@Model.Data.lead_name</p>
+                    <hr>
+                </div>
+                <div>
+                    <p class="label">Lead Date </p>
+                    <p id="leadDate" class="lead-data">@Model.Data.created_on</p>
+                    <hr>
+                </div>
+                <div>
+                    <p class="label">Hospital Name </p>
+                    <p class="lead-data">@Model.Data.hospital_name</p>
+                    <hr>
+                </div>
+                <div>
+                    <p class="label">Hospital Region</p>
+                    <p class="lead-data">@Model.Data.region</p>
+                    <hr>
+                </div>
+                <div>
+                    <p class="label">Contact Person</p>
+                    <p class="lead-data">@Model.Data.contact_person</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (await _identityService.IsUserInRole(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value, DefaultRoles.ADMIN.ToString()))
+    {
+        <div class="col-xl-5 col-md-5">
+            <h2>Status & Reward</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-sm-8">
+                            <select name="lead_status_id" id="lead_status_id"
+                                    asp-for="Data.lead_status_id"
+                                    asp-items="@(new SelectList(ViewBag.leadStatuses, "id", "name"))"
+                                    class="form-control" onchange="changeStatus()">
+                            </select>
+
+                            <div id="statusReasonArea">
+                                <br />
+                                <span id="notesValidation" class="text-danger small font-weight-bold">
+                                    Reason is required
+                                </span>
+                                <textarea rows="3" id="notes" name="notes"
+                                            placeholder="Rejection reason"
+                                            class="form-control"
+                                            asp-for="Data.lead_status_notes"
+                                            onkeyup="changeNotesText()"></textarea>
+                            </div>
+                            
+                        </div>
+
+                        <div class="form-group col-sm-4" style="text-align: right; align-self: flex-end;">
+                            <button id="applyStatusBtn" class="btn btn-primary" onclick="applyStatus()">Apply</button>
+
+                            <button id="applyStatusLoader" class="btn btn-primary" type="button" disabled>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-sm-8">
+                                <label class="form-control-label" for="status">Reward Class</label>
+                                <select name="reward_class_id" id="reward_class_id"
+                                        asp-for="Data.reward_class_id"
+                                        asp-items="@(new SelectList(ViewBag.rewardClasses, "id", "name"))"
+                                        class="form-control">
+                                    <option value="">Select Reward Class</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-8">
+                                <label class="form-control-label" for="status">Reward Criteria</label>
+                                <select name="reward_criteria_id" id="reward_criteria_id"
+                                        asp-for="Data.reward_criteria_id"
+                                        asp-items="@(new SelectList(ViewBag.rewardCriterias, "id", "name"))"
+                                        class="form-control">
+                                    <option value="">Select Reward Criteria</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-4" style="text-align: right; align-self: flex-end;">
+                                <button id="applyRewardBtn" class="btn btn-primary" onclick="applyReward()">Apply</button>
+                                <button id="applyRewardLoader" class="btn btn-primary" type="button" disabled>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    <span class="sr-only">Loading...</span>
+                                </button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-xl-5 col-md-5">
+            <h2>Status & Reward</h2>
+            <div class="card">
+                <div class="card-body">
+                    <h3 style="
+                          color: @Model.Data.lead_status_text_color;
+                          background-color: @Model.Data.lead_status_back_color;
+                          margin: auto auto;
+                          padding: 5px 14px;
+                        ">
+                        @Model.Data.lead_status
+                    </h3>
+                    @if (Model.Data.lead_status_id == Domain.Enums.LeadStatuses.Rejected)
+                    {
+                        <h4>
+                            <i>
+                                Reason:
+                            </i>
+                        </h4>
+                        <p class="small font-weight-bold">@Model.Data.lead_status_notes</p>
+                    }
+
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="form-group col-sm-8">
+                                <label class="form-control-label" for="status">Reward Class</label>
+                                <h3 style="margin: auto auto;padding: 5px 14px;">
+                                    @if (string.IsNullOrWhiteSpace(Model.Data.reward_class))
+                                    {
+                                        <i>Unspecified</i>
+                                    }
+                                    else
+                                    {
+                                        @Model.Data.reward_class
+                                    }
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-8">
+                                <label class="form-control-label" for="status">Reward Criteria</label>
+                                <h3 style="margin: auto auto;padding: 5px 14px;">
+                                    @if (string.IsNullOrWhiteSpace(Model.Data.reward_criteria))
+                                    {
+                                        <i>Unspecified</i>
+                                    }
+                                    else
+                                    {
+                                        @Model.Data.reward_criteria
+                                    }
+                                </h3>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+
+
+</div>
+<div class="row">
+    <div class="col-xl-7 col-md-7">
+        <h2>Details</h2>
+        <div class="card">
+            <!-- Card body -->
+            <div class="card-body">
+                <div>
+                    <p class="label">Business opportunity Type </p>
+                    <p class="lead-data">@Model.Data.business_opportunity_type</p>
+                    <hr>
+                </div>
+                <div>
+                    <p class="label">Customer Status </p>
+                    <p class="lead-data">@Model.Data.customer_status</p>
+                    <hr>
+                </div>
+                <div>
+                    <p class="label">Date Need System</p>
+                    <p id="dateNeedSystem" class="lead-data">@Model.Data.customer_due_date</p>
+                    <hr>
+                </div>
+                <div>
+                    <p class="label">Notes</p>
+                    <p class="lead-data">@Model.Data.comment</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-5 col-md-5">
+        <h2>Devices</h2>
+        <div class="card">
+            <!-- Card body -->
+            <div class="card-body">
+                @{int i = 1;}
+                @foreach (var device in Model.Data.devices)
+                {
+                    <div>
+                        <p class="label">Device / Need @i </p>
+                        <p class="lead-data">@device</p>
+                        <hr>
+                    </div>
+                    i++;
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#applyStatusLoader").hide();
+            $("#applyRewardLoader").hide();
+            $("#notesValidation").hide();
+
+            var currentStatus = @((int)Model.Data.lead_status_id);
+
+            if (currentStatus == 5) {
+                $("#statusReasonArea").show();
+            } else {
+                $("#statusReasonArea").hide();
+            }
+
+            $("#leadDate").text(timeConverter($("#leadDate").text().trim()));
+            $("#dateNeedSystem").text(timeConverter($("#dateNeedSystem").text().trim()));
+
+        });
+
+        var changeStatus = function () {
+            $("#notes").val("");
+            if ($("#lead_status_id").val() == 5) {
+                $("#statusReasonArea").show();
+            } else {
+                $("#statusReasonArea").hide();
+            }
+        }
+
+        var changeNotesText = function () {
+            if ($("#notes").val()) {
+                $("#notesValidation").hide();
+            } else {
+                $("#notesValidation").show();
+            }
+        }
+
+        var applyStatus = function () {
+            if ($("#lead_status_id").val() == 5 && !$("#notes").val()) {
+                $("#notesValidation").show();
+                return;
+            }
+
+            $("#notesValidation").hide();
+
+            var data = {
+                "lead_id": $("#lead_id").val(),
+                "status_id": $("#lead_status_id").val(),
+                "notes": $("#notes").val()
+            };
+
+            $("#applyStatusBtn").hide();
+            $("#applyStatusLoader").show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ChangeStatus", "DashboardLeads")',
+                data: data,
+                success: function (result) {
+                    if (result.is_success) {
+                        toastr.success(result.message);
+                    } else {
+                        toastr.error(result.message);
+                    }
+                    $("#applyStatusBtn").show();
+                    $("#applyStatusLoader").hide();
+                },
+                error: function (result) {
+                    $("#applyStatusBtn").show();
+                    $("#applyStatusLoader").hide();
+                    toastr.error("please try again or contact administrator", "An error has occurred");
+                }
+            });
+    }
+
+    var applyReward = function () {
+        var data = {
+            "lead_id": $("#lead_id").val(),
+            "reward_class_id": $("#reward_class_id").val(),
+            "reward_criteria_id": $("#reward_criteria_id").val()
+        };
+
+        $("#applyRewardBtn").hide();
+        $("#applyRewardLoader").show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetRewardCriteria", "DashboardLeads")',
+            data: data,
+            success: function (result) {
+                if (result.is_success) {
+                    toastr.success(result.message);
+                } else {
+                    toastr.error(result.message);
+                }
+                $("#applyRewardBtn").show();
+                $("#applyRewardLoader").hide();
+            },
+            error: function (result) {
+                $("#applyRewardBtn").show();
+                $("#applyRewardLoader").hide();
+                toastr.error("please try again or contact administrator", "An error has occurred");
+            }
+        });
+        }
+
+        function timeConverter(UNIX_timestamp) {
+            var a = new Date(UNIX_timestamp * 1000);
+            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var year = a.getFullYear();
+            var month = months[a.getMonth()];
+            var date = a.getDate();
+            var t = a.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            var time = date + ' ' + month + ' ' + year + ', ' + t;
+            return time;
+        }
+    </script>
+ }
