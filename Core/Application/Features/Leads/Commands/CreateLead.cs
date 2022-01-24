@@ -24,9 +24,11 @@ namespace Application.Features.Leads.Commands
         {
             public string lead_name { get; set; }
             public string hospital_name { get; set; }
-            public string region { get; set; }
+            public string city { get; set; }
             public BusinessOpportunityTypes? business_opportunity_type { get; set; }
             public CustomerStatuses customer_status { get; set; }
+            public Regions region { get; set; }
+            public Sectors sector { get; set; }
             public long customer_due_date { get; set; }
             public string comment { get; set; }
             public string contact_person { get; set; }
@@ -47,10 +49,10 @@ namespace Application.Features.Leads.Commands
                    .MaximumLength(500)
                    .WithName(p => localizer.Get(ResourceKeys.HospitalName));
 
-                RuleFor(p => p.region)
+                RuleFor(p => p.city)
                   .NotEmpty()
                   .MaximumLength(500)
-                  .WithName(p => localizer.Get(ResourceKeys.Region));
+                  .WithName(p => localizer.Get(ResourceKeys.City));
 
                 RuleFor(p => p.business_opportunity_type)
                  .IsInEnum()
@@ -60,6 +62,16 @@ namespace Application.Features.Leads.Commands
                  .NotEmpty()
                  .IsInEnum()
                  .WithName(p => localizer.Get(ResourceKeys.CustomerStatus));
+
+                RuleFor(p => p.region)
+                 .NotEmpty()
+                 .IsInEnum()
+                 .WithName(p => localizer.Get(ResourceKeys.Region));
+
+                RuleFor(p => p.sector)
+                 .NotEmpty()
+                 .IsInEnum()
+                 .WithName(p => localizer.Get(ResourceKeys.Sector));
 
                 RuleFor(p => p.customer_due_date)
                  .NotEmpty()
@@ -109,7 +121,9 @@ namespace Application.Features.Leads.Commands
                 {
                     LeadName = request.lead_name,
                     HospitalName = request.hospital_name,
-                    Region = request.region,
+                    RegionId = request.region,
+                    SectorId = request.sector,
+                    City = request.city,
                     Comment = request.comment,
                     ContactPerson = request.contact_person,
                     BusinessOpportunityTypeId = request.business_opportunity_type,

@@ -54,5 +54,33 @@ namespace WebApi.Controllers.v1
 
             return Ok(result);
         }
+
+        /// <summary>
+        /// Get regions lookup data
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(baseRoute + "/regions")]
+        [ProducesResponseType(typeof(Result<IEnumerable<LookupResponseDTO>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetRegions()
+        {
+            var result = await Mediator.Send(new GetRegions.Query());
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get sectors lookup data
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(baseRoute + "/sectors")]
+        [ProducesResponseType(typeof(Result<IEnumerable<LookupResponseDTO>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetSectors()
+        {
+            var result = await Mediator.Send(new GetSectors.Query());
+
+            return Ok(result);
+        }
+
+
     }
 }

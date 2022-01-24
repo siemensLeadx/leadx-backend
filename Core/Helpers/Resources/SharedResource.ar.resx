@@ -333,4 +333,13 @@
   <data name="{0}_MAX_LENGTH_IS_{1}" xml:space="preserve">
     <value>{0} له حد أقصى من الحروف لا يتعدى {1}</value>
   </data>
+  <data name="CITY" xml:space="preserve">
+    <value>المدينة</value>
+  </data>
+  <data name="SECTOR" xml:space="preserve">
+    <value>القطاع</value>
+  </data>
+  <data name="SET_APPROVED_BEFORE_PROMOTED" xml:space="preserve">
+    <value>لا يمكن ترقية الفرصة المحتملة قبل الموافقة</value>
+  </data>
 </root>

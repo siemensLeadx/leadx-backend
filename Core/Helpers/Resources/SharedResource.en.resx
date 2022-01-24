@@ -333,4 +333,13 @@
   <data name="{0}_MAX_LENGTH_IS_{1}" xml:space="preserve">
     <value>{0} has max length of {1}</value>
   </data>
+  <data name="CITY" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="SECTOR" xml:space="preserve">
+    <value>Sector</value>
+  </data>
+  <data name="SET_APPROVED_BEFORE_PROMOTED" xml:space="preserve">
+    <value>Can not promote lead before it is approved first</value>
+  </data>
 </root>

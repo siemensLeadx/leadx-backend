@@ -8,7 +8,9 @@ namespace Application.Features.Leads.Queries.GetDashboardLeadDetails
         public long lead_id { get; set; }
         public string lead_name { get; set; }
         public string hospital_name { get; set; }
+        public string city { get; set; }
         public string region { get; set; }
+        public string sector { get; set; }
         public string business_opportunity_type { get; set; }
         public string customer_status { get; set; }
         public long customer_due_date { get; set; }

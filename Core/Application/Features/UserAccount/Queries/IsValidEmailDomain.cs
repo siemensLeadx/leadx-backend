@@ -37,7 +37,7 @@ namespace Application.Features.UserAccount.Queries
             public async Task<Result> Handle(Query request, CancellationToken cancellationToken)
             {
                 var stringSegments = request.email.ToString().Split('@');
-                var result =  stringSegments[1].Trim().ToLower() == _config.GetAppSettings().Email_Domain;
+                var result = _config.GetAppSettings().Email_Domain.Contains(stringSegments[1].Trim().ToLower());
 
                 return result ? Result.Success(string.Empty) :
                     Result.Fail(_localizer.Get(ResourceKeys.InvalidEmailDomain));

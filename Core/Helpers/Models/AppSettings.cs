@@ -12,7 +12,7 @@ namespace Helpers.Models
         public List<ApiClient> ApiClients { get; set; }
         public JWTSettings JWTSettings { get; set; }
         public string Api_URL { get; set; }
-        public string Email_Domain { get; set; }
+        public string[] Email_Domain { get; set; }
     }
 
     public class EmailSettings

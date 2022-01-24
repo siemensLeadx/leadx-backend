@@ -76,5 +76,8 @@ namespace Helpers.Resources
         public const string DuplicateDevice = "DUPLICATE_DEVICE";
         public const string ChangeLanguage = "CHANGE_LANGUAGE";
         public const string SetLeadReward = "SET_LEAD_REWARD";
+        public const string Sector = "SECTOR";
+        public const string City = "CITY";
+        public const string SetApprovedBeforePromoted = "SET_APPROVED_BEFORE_PROMOTED";
     }
 }

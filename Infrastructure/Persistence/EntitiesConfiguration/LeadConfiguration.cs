@@ -11,7 +11,7 @@ namespace Persistence.EntitiesConfiguration
             builder.HasKey(p => p.Id);
             builder.Property(p => p.LeadName).HasMaxLength(500);
             builder.Property(p => p.HospitalName).HasMaxLength(500);
-            builder.Property(p => p.Region).HasMaxLength(500);
+            builder.Property(p => p.City).HasMaxLength(500);
             builder.Property(p => p.Comment).HasMaxLength(2000);
             builder.Property(p => p.ContactPerson).HasMaxLength(500);
             builder.Property(p => p.PromotedPrize).HasColumnType("decimal(8, 2)");
@@ -49,6 +49,14 @@ namespace Persistence.EntitiesConfiguration
             builder.HasOne(p => p.RewardCriteria)
                .WithMany()
                .HasForeignKey(p => p.RewardCriteriaId);
+
+            builder.HasOne(p => p.RegionArea)
+              .WithMany(p => p.Leads)
+              .HasForeignKey(p => p.RegionId);
+
+            builder.HasOne(p => p.Sector)
+              .WithMany(p => p.Leads)
+              .HasForeignKey(p => p.SectorId);
         }
     }
 }

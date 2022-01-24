@@ -15,8 +15,8 @@ namespace Persistence.EntitiesConfiguration
             builder.Property(p => p.NameEn).HasMaxLength(200);
 
             builder.HasData(
-                new CustomerStatus { Id = CustomerStatuses.Siemens, NameEn = "Siemens", NameAr = "سيمنز" },
-                new CustomerStatus { Id = CustomerStatuses.Competitor, NameEn = "Competitor", NameAr = "منافس" },
+                new CustomerStatus { Id = CustomerStatuses.Siemens, NameEn = "Siemens", NameAr = "موقع سيمنس" },
+                new CustomerStatus { Id = CustomerStatuses.Competitor, NameEn = "Competitor", NameAr = "موقع لمنافس" },
                 new CustomerStatus { Id = CustomerStatuses.New, NameEn = "New customer", NameAr = "عميل جديد" });
         }
     }

@@ -17,11 +17,15 @@ namespace Domain.Entities
         }
         public string LeadName { get; set; }
         public string HospitalName { get; set; }
-        public string Region { get; set; }
+        public string City { get; set; }
         public BusinessOpportunityTypes? BusinessOpportunityTypeId { get; set; }
         public virtual BusinessOpportunityType BusinessOpportunityType { get; set; }
         public CustomerStatuses CustomerStatusId { get; set; }
         public virtual CustomerStatus CustomerStatus { get; set; }
+        public Regions? RegionId { get; set; }
+        public virtual RegionArea RegionArea { get; set; }
+        public Sectors? SectorId { get; set; }
+        public virtual Sector Sector { get; set; }
         public DateTime CustomerDueDate { get; set; }
         public string Comment { get; set; }
         public string ContactPerson { get; set; }
@@ -41,9 +45,10 @@ namespace Domain.Entities
 
         public void ChangeStatus(LeadStatuses newStatus, Guid userId, string notes = null)
         {
-            Precondition.Requires(CanChangeStatus(newStatus), "Must set the reward class and criteria");
+            Precondition.Requires(IsLeadRewardSet(newStatus), "Must set the reward class and criteria");
+            Precondition.Requires(CanPromoteLead(newStatus), "The last status must be approved to promote lead");
 
-            if(CurrentLeadStatusId == newStatus)
+            if (CurrentLeadStatusId == newStatus)
             {
                 var lastStatusHistory = StatusHistory.Where(x => x.StatusId == newStatus)
                     .OrderByDescending(s => s.CreatedAt)
@@ -70,16 +75,25 @@ namespace Domain.Entities
 
         public void SetRewardPrize(LeadStatuses status, RewardPrize prize)
         {
-            if (status == LeadStatuses.Promoted)
+            if (status == LeadStatuses.Approved)
                 PromotedPrize = prize.LeadOnlyPrize;
             else if (status == LeadStatuses.Ordered)
                 OrderedPrize = prize.LeadWithPOPrize;
         }
 
-        public bool CanChangeStatus(LeadStatuses status)
+        public bool IsLeadRewardSet(LeadStatuses status)
         {
-            if (status == LeadStatuses.Promoted || status == LeadStatuses.Ordered)
+            if (status == LeadStatuses.Approved || status == LeadStatuses.Ordered)
                 return RewardClassId.HasValue && RewardCriteriaId.HasValue;
+            else
+                return true;
+        }
+
+        public bool CanPromoteLead(LeadStatuses status)
+        {
+            if (status == LeadStatuses.Promoted)
+                return CurrentLeadStatusId == LeadStatuses.Approved ||
+                       CurrentLeadStatusId == LeadStatuses.Promoted;
             else
                 return true;
         }

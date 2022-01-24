@@ -51,8 +51,11 @@ namespace Application.Features.Leads.Commands
                 var lead = await _uow.Repository<Lead>()
                     .GetByIdAsync(request.lead_id);
 
-                if (!lead.CanChangeStatus(request.status_id))
+                if (!lead.IsLeadRewardSet(request.status_id))
                     return Result.Fail(_localizer.Get(ResourceKeys.SetLeadReward));
+
+                if(!lead.CanPromoteLead(request.status_id))
+                    return Result.Fail(_localizer.Get(ResourceKeys.SetApprovedBeforePromoted));
 
                 lead.ChangeStatus(request.status_id,
                     Guid.Parse(_authenticatedUserService.UserId), request.notes);
@@ -110,29 +113,24 @@ namespace Application.Features.Leads.Commands
 
             private static void CreateLocalizedMessage(Command request, Lead lead, LeadStatus currentStatus, out string messageEn, out string messageAr)
             {
-                if (request.status_id == LeadStatuses.Promoted || request.status_id == LeadStatuses.Ordered)
+                if (request.status_id == LeadStatuses.Approved || request.status_id == LeadStatuses.Ordered)
                 {
-                    messageEn = $"Your lead with id {lead.Id} is now {currentStatus.NameEn}" +
-                        $" and you will receive a reward in your next billing";
+                    messageEn = $"Status of Lead with ID {lead.Id}: is {currentStatus.NameEn}\n" +
+                        $"you will get a reward in your next payroll";
 
-                    messageAr = $"الفرصة المحتملة رقم {lead.Id} هي الأن في حالة {currentStatus.NameAr} " +
-                        $"وسوف تتلقى مكافأة في مرتبك القادم";
-                }
-                else if (request.status_id == LeadStatuses.Rejected)
-                {
-                    messageEn = $"Your lead with id {lead.Id} is {currentStatus.NameEn}";
-                    messageAr = $"الفرصة المحتملة رقم {lead.Id} هي الأن في حالة {currentStatus.NameAr}";
+                    messageAr = $"حالة الفرصة المحتملة رقم {lead.Id}: {currentStatus.NameAr}\n" +
+                        $"سوف تحصل على مكافأة مع مرتبك القادم";
                 }
                 else
                 {
-                    messageEn = $"Your lead with id {lead.Id} is now {currentStatus.NameEn}";
-                    messageAr = $"الفرصة المحتملة رقم {lead.Id} هي الأن في حالة {currentStatus.NameAr}";
+                    messageEn = $"Status of Lead with ID {lead.Id}: is {currentStatus.NameEn}";
+                    messageAr = $"حالة الفرصة المحتملة رقم {lead.Id}: {currentStatus.NameAr}";
                 }
             }
 
             private RewardPrize SetLeadRewardPrize(Lead lead, LeadStatuses status)
             {
-                if ((status == LeadStatuses.Promoted || status == LeadStatuses.Ordered) &&
+                if ((status == LeadStatuses.Approved || status == LeadStatuses.Ordered) &&
                     lead.RewardCriteriaId.HasValue && 
                     lead.RewardClassId.HasValue)
                 {

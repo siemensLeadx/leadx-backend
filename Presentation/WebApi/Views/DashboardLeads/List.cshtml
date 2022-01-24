@@ -15,7 +15,7 @@
                             </span>
                         </div>
                         <input class="form-control"
-                               placeholder="Search by lead name"
+                               placeholder="lead name / user email"
                                name="name" value="@ViewBag.CurrentFilter"
                                type="text" />
                     </div>
@@ -23,7 +23,21 @@
                 <div class="form-group col-xl-5">
                     <select class="form-control" id="status" name="status"
                             asp-for="Status" asp-items="@(new SelectList(ViewBag.statuses, "id", "name"))">
-                        <option value="">All Statuses</option>
+                        <option value="">All Status</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xl-5">
+                    <select class="form-control" id="region" name="region"
+                            asp-for="Region" asp-items="@(new SelectList(ViewBag.regions, "id", "name"))">
+                        <option value="">All Regions</option>
+                    </select>
+                </div>
+                <div class="form-group col-xl-5">
+                    <select class="form-control" id="sector" name="sector"
+                            asp-for="Sector" asp-items="@(new SelectList(ViewBag.sectors, "id", "name"))">
+                        <option value="">All Sectors</option>
                     </select>
                 </div>
                 <div class="form-group col-xl-2">

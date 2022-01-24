@@ -21,13 +21,17 @@ namespace Application.Specifications.Leads
                 lead_id = lead.Id,
                 lead_name = lead.LeadName,
                 hospital_name = lead.HospitalName,
-                region = lead.Region,
+                city = lead.City,
                 contact_person = lead.ContactPerson,
                 comment = lead.Comment,
                 customer_due_date = lead.CustomerDueDate.ToUnixTimeStamp(),
                 created_on = lead.CreatedOn.ToUnixTimeStamp(),
                 business_opportunity_type = lead.BusinessOpportunityType == null ? null : SetOpportunityTypeName(lead, lang),
                 customer_status = lang.Contains(KeyValueConstants.Arabic) ? lead.CustomerStatus.NameAr : lead.CustomerStatus.NameEn,
+                region = lead.RegionArea == null ? null :
+                    lang.Contains(KeyValueConstants.Arabic) ? lead.RegionArea.NameAr : lead.RegionArea.NameEn,
+                sector = lead.Sector == null ? null :
+                    lang.Contains(KeyValueConstants.Arabic) ? lead.Sector.NameAr : lead.Sector.NameEn,
                 lead_status = lang.Contains(KeyValueConstants.Arabic) ? lead.CurrentLeadStatus.NameAr : lead.CurrentLeadStatus.NameEn,
                 lead_status_back_color = lead.CurrentLeadStatus.BackgroundColor,
                 lead_status_text_color = lead.CurrentLeadStatus.TextColor,

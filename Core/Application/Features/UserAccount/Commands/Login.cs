@@ -43,7 +43,7 @@ namespace Application.Features.UserAccount.Commands
                     .EmailAddress()
                     .Must(p => {
                         var domain = p.Trim().ToLower().Split("@")[1];
-                        return domain == applicationConfiguration.GetAppSettings().Email_Domain;
+                        return applicationConfiguration.GetAppSettings().Email_Domain.Contains(domain);
                     })
                     .WithMessage(p => localizer.Get(ResourceKeys.InvalidEmailDomain))
                     .WithName(p => localizer.Get(ResourceKeys.Email));

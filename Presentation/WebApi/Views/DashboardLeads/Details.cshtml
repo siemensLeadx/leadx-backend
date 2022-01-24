@@ -71,8 +71,8 @@
                     <hr>
                 </div>
                 <div>
-                    <p class="label">Hospital Region</p>
-                    <p class="lead-data">@Model.Data.region</p>
+                    <p class="label">City</p>
+                    <p class="lead-data">@Model.Data.city</p>
                     <hr>
                 </div>
                 <div>
@@ -102,6 +102,7 @@
                                     Reason is required
                                 </span>
                                 <textarea rows="3" id="notes" name="notes"
+                                            maxlength="500"
                                             placeholder="Rejection reason"
                                             class="form-control"
                                             asp-for="Data.lead_status_notes"
@@ -232,6 +233,16 @@
         <div class="card">
             <!-- Card body -->
             <div class="card-body">
+                <div>
+                    <p class="label">Region</p>
+                    <p class="lead-data">@Model.Data.region</p>
+                    <hr>
+                </div>
+                <div>
+                    <p class="label">Sector</p>
+                    <p class="lead-data">@Model.Data.sector</p>
+                    <hr>
+                </div>
                 <div>
                     <p class="label">Business opportunity Type </p>
                     <p class="lead-data">@Model.Data.business_opportunity_type</p>

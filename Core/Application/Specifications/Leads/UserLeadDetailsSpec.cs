@@ -23,7 +23,7 @@ namespace Application.Specifications.Leads
                 lead_id = lead.Id,
                 lead_name = lead.LeadName,
                 hospital_name = lead.HospitalName,
-                region = lead.Region,
+                city = lead.City,
                 contact_person = lead.ContactPerson,
                 comment = lead.Comment,
                 customer_due_date = lead.CustomerDueDate.ToUnixTimeStamp(),
@@ -31,6 +31,10 @@ namespace Application.Specifications.Leads
                 business_opportunity_type = lead.BusinessOpportunityType == null ? null :
                     lang.Contains(KeyValueConstants.Arabic) ? lead.BusinessOpportunityType.NameAr : lead.BusinessOpportunityType.NameEn,
                 customer_status = lang.Contains(KeyValueConstants.Arabic) ? lead.CustomerStatus.NameAr : lead.CustomerStatus.NameEn,
+                region = lead.RegionArea == null ? null :
+                    lang.Contains(KeyValueConstants.Arabic) ? lead.RegionArea.NameAr : lead.RegionArea.NameEn,
+                sector = lead.Sector == null ? null :
+                    lang.Contains(KeyValueConstants.Arabic) ? lead.Sector.NameAr : lead.Sector.NameEn,
                 lead_status_id = lead.CurrentLeadStatusId,
                 lead_status_note = lead.StatusHistory.Where(h => h.StatusId == lead.CurrentLeadStatusId)
                     .OrderByDescending(h => h.CreatedAt).FirstOrDefault().Notes,
@@ -45,7 +49,7 @@ namespace Application.Specifications.Leads
 
         private static int? GetLeadReward(Lead lead)
         {
-            if (lead.CurrentLeadStatusId == LeadStatuses.Promoted)
+            if (lead.CurrentLeadStatusId == LeadStatuses.Approved)
             {
                 return (int)lead.PromotedPrize;
             }

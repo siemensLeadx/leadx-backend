@@ -18,19 +18,28 @@ namespace WebApi.Controllers.AdminDashboard
         [HttpGet]
         public async Task<IActionResult> List([FromQuery] int page_number,
             [FromQuery] string name,
-            [FromQuery] LeadStatuses? status)
+            [FromQuery] LeadStatuses? status,
+            [FromQuery] Regions? region,
+            [FromQuery] Sectors? sector)
         {
             var statusLookup = await Mediator.Send(new GetLeadStatuses.Query());
+            var regionLookup = await Mediator.Send(new GetRegions.Query());
+            var sectorLookup = await Mediator.Send(new GetSectors.Query());
 
-            var result = await Mediator.Send(new GetDashboardLeads.Query(page_number, 10, name, status));
+            var result = await Mediator.Send(new GetDashboardLeads.Query(page_number, 10, name,
+                status, region, sector));
 
             ViewBag.CurrentFilter = name;
             ViewBag.statuses = statusLookup.Data;
+            ViewBag.regions = regionLookup.Data;
+            ViewBag.sectors = sectorLookup.Data;
 
             var model = new LeadsListVM
             {
                 ListWithPagination = result,
-                Status = status
+                Status = status,
+                Region = region,
+                Sector = sector,
             };
 
             return View(model);

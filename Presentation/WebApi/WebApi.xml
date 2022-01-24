@@ -46,6 +46,18 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:WebApi.Controllers.v1.LookupsController.GetRegions">
+            <summary>
+            Get regions lookup data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.LookupsController.GetSectors">
+            <summary>
+            Get sectors lookup data
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:WebApi.Controllers.v1.UserDevicesController.AddUpdateDevice(Application.Features.UserAccount.Commands.AddUpdateUserDevice.Command)">
             <summary>
             Add / update user device token

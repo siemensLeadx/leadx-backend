@@ -37,6 +37,8 @@ namespace Persistence.Context
         public DbSet<RewardPrize> RewardPrizes { get; set; }
         public DbSet<NeededDevice> NeededDevices { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<RegionArea> Regions { get; set; }
+        public DbSet<Sector> Sectors { get; set; }
 
         public IDbConnection Connection => Database.GetDbConnection();
 
