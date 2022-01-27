@@ -259,7 +259,7 @@ namespace WebApi.Extensions
                 {
                     microsoftOptions.Events.OnRedirectToAuthorizationEndpoint = async context =>
                     {
-                        context.RedirectUri = context.RedirectUri.Replace("http%3A%2F%2F", "https%3A%2F%2F");
+                        // context.RedirectUri = context.RedirectUri.Replace("http%3A%2F%2F", "https%3A%2F%2F");
                         await redirect(context);
                     };
                 }            
