@@ -91,7 +91,7 @@ namespace WebApi
 
             app.UseForwardedHeaders();
             app.UseHsts();
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRequestLocalization();
 
