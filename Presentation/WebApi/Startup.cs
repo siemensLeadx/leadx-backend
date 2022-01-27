@@ -89,8 +89,8 @@ namespace WebApi
         {
             AddUsers.SeedData(identityService).GetAwaiter().GetResult();
 
-            app.UseForwardedHeaders();
-            app.UseHsts();
+            //app.UseForwardedHeaders();
+            //app.UseHsts();
             // app.UseHttpsRedirection();
 
             app.UseRequestLocalization();
