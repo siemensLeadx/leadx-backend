@@ -17,6 +17,7 @@ using Application.Interfaces;
 using Persistence.SeedData;
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace WebApi
 {
@@ -71,11 +72,24 @@ namespace WebApi
                 o.ExpireTimeSpan = TimeSpan.FromDays(1);
                
             });
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                              ForwardedHeaders.XForwardedProto;
+                // Only loopback proxies are allowed by default.
+                // Clear that restriction because forwarders are enabled by explicit
+                // configuration.
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
         }
 
         public void Configure(IApplicationBuilder app, IIdentityService identityService)
         {
             AddUsers.SeedData(identityService).GetAwaiter().GetResult();
+
+            app.UseForwardedHeaders();
 
             app.UseRequestLocalization();
 
