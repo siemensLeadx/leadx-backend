@@ -18,7 +18,6 @@ using Persistence.SeedData;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Hosting;
 
 namespace WebApi
 {
@@ -76,8 +75,13 @@ namespace WebApi
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                              ForwardedHeaders.XForwardedProto;
+                // Only loopback proxies are allowed by default.
+                // Clear that restriction because forwarders are enabled by explicit
+                // configuration.
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
             });
         }
 
@@ -87,15 +91,11 @@ namespace WebApi
 
             app.UseForwardedHeaders();
 
-            if(_env.IsProduction()) app.UseHsts();
-
             app.UseRequestLocalization();
 
             app.UseHttpsRedirection();
 
-            // app.UseMiddleware<ErrorHandlingMiddleware>();
-
-            app.UseDeveloperExceptionPage();
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseCors(KeyValueConstants.AllowedCrosOrigins);
 
