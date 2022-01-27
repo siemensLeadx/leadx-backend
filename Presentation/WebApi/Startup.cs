@@ -82,7 +82,9 @@ namespace WebApi
 
             app.UseHttpsRedirection();
 
-            app.UseMiddleware<ErrorHandlingMiddleware>();
+            // app.UseMiddleware<ErrorHandlingMiddleware>();
+
+            app.UseDeveloperExceptionPage();
 
             app.UseCors(KeyValueConstants.AllowedCrosOrigins);
 
