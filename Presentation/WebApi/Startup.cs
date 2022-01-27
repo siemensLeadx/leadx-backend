@@ -87,11 +87,13 @@ namespace WebApi
 
             app.UseForwardedHeaders();
 
-            app.UseHttpsRedirection();
+            // app.UseMiddleware<ErrorHandlingMiddleware>();
+
+            app.UseDeveloperExceptionPage();
 
             app.UseRequestLocalization();
-
-            app.UseMiddleware<ErrorHandlingMiddleware>();
+            
+            app.UseHttpsRedirection();
 
             app.UseCors(KeyValueConstants.AllowedCrosOrigins);
 
