@@ -161,6 +161,7 @@ namespace Persistence.SeedData
 
                 user = new AppUser(Name.Create("Mohammed", "Hakami"), "mohammed.hakami@siemens-healthineers.com", "mohammed.hakami@siemens-healthineers.com");
                 await identityService.Add(user);
+                await identityService.AddUserToRole(user, DefaultRoles.BLOCKED.ToString());
 
                 user = new AppUser(Name.Create("Samir", "Slimani"), "samir.slimani@siemens-healthineers.com", "samir.slimani@siemens-healthineers.com");
                 await identityService.Add(user);
@@ -192,6 +193,7 @@ namespace Persistence.SeedData
 
                 user = new AppUser(Name.Create("Rases", "Alwihbe"), "rases.alwhibe@siemens-healthineers.com", "rases.alwhibe@siemens-healthineers.com");
                 await identityService.Add(user);
+                await identityService.AddUserToRole(user, DefaultRoles.BLOCKED.ToString());
 
                 user = new AppUser(Name.Create("Umer", "Hussain"), "Umer.Hussain@siemens-healthineers.com", "Umer.Hussain@siemens-healthineers.com");
                 await identityService.Add(user);

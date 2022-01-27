@@ -18,6 +18,7 @@ using Persistence.SeedData;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Hosting;
 
 namespace WebApi
 {
@@ -72,11 +73,21 @@ namespace WebApi
                 o.ExpireTimeSpan = TimeSpan.FromDays(1);
                
             });
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IIdentityService identityService)
         {
             AddUsers.SeedData(identityService).GetAwaiter().GetResult();
+
+            app.UseForwardedHeaders();
+
+            if(_env.IsProduction()) app.UseHsts();
 
             app.UseRequestLocalization();
 
