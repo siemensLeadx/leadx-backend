@@ -90,10 +90,10 @@ namespace WebApi
             AddUsers.SeedData(identityService).GetAwaiter().GetResult();
 
             app.UseForwardedHeaders();
+            app.UseHsts();
+            app.UseHttpsRedirection();
 
             app.UseRequestLocalization();
-
-            app.UseHttpsRedirection();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
