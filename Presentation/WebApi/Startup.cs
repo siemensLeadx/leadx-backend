@@ -89,9 +89,7 @@ namespace WebApi
             
             app.UseRequestLocalization();
 
-            // app.UseMiddleware<ErrorHandlingMiddleware>();
-
-            app.UseDeveloperExceptionPage();
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
