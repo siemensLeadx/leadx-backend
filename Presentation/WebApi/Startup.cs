@@ -75,7 +75,8 @@ namespace WebApi
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders = ForwardedHeaders.All;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                              ForwardedHeaders.XForwardedProto;
                 // Only loopback proxies are allowed by default.
                 // Clear that restriction because forwarders are enabled by explicit
                 // configuration.
