@@ -252,17 +252,7 @@ namespace WebApi.Extensions
             {
                 microsoftOptions.ClientId = configuration["Microsoft_Auth:Client_Id"];
                 microsoftOptions.ClientSecret = configuration["Microsoft_Auth:Client_Secret"];
-                microsoftOptions.CallbackPath = "/dashboard/en/signin-microsoft";
-                var redirect = microsoftOptions.Events.OnRedirectToAuthorizationEndpoint;
-
-                if (_env.IsProduction())
-                {
-                    microsoftOptions.Events.OnRedirectToAuthorizationEndpoint = async context =>
-                    {
-                        // context.RedirectUri = context.RedirectUri.Replace("http%3A%2F%2F", "https%3A%2F%2F");
-                        await redirect(context);
-                    };
-                }            
+                microsoftOptions.CallbackPath = "/dashboard/en/signin-microsoft";          
             }); 
         }
 

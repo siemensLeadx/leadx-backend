@@ -75,11 +75,7 @@ namespace WebApi
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
-                              ForwardedHeaders.XForwardedProto;
-                // Only loopback proxies are allowed by default.
-                // Clear that restriction because forwarders are enabled by explicit
-                // configuration.
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
                 options.KnownNetworks.Clear();
                 options.KnownProxies.Clear();
             });
@@ -89,9 +85,9 @@ namespace WebApi
         {
             AddUsers.SeedData(identityService).GetAwaiter().GetResult();
 
-            //app.UseForwardedHeaders();
-            //app.UseHsts();
-            // app.UseHttpsRedirection();
+            app.UseForwardedHeaders();
+
+            app.UseHttpsRedirection();
 
             app.UseRequestLocalization();
 
