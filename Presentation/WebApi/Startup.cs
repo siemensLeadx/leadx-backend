@@ -85,12 +85,12 @@ namespace WebApi
         {
             AddUsers.SeedData(identityService).GetAwaiter().GetResult();
 
-            app.UseForwardedHeaders();
-
-            app.UseMiddleware<ErrorHandlingMiddleware>();
-
-            app.UseRequestLocalization();
+            app.UseForwardedHeaders(); 
             
+            app.UseRequestLocalization();
+
+            // app.UseMiddleware<ErrorHandlingMiddleware>();
+
             app.UseHttpsRedirection();
 
             app.UseCors(KeyValueConstants.AllowedCrosOrigins);
