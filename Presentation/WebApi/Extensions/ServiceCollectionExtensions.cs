@@ -29,6 +29,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace WebApi.Extensions
 {
@@ -207,7 +209,8 @@ namespace WebApi.Extensions
             });
         }
 
-        public static void AddAuthenticationService(this IServiceCollection services, IConfiguration configuration)
+        public static void AddAuthenticationService(this IServiceCollection services,
+            IConfiguration configuration, IWebHostEnvironment _env)
         {
             
 
@@ -250,9 +253,17 @@ namespace WebApi.Extensions
                 microsoftOptions.ClientId = configuration["Microsoft_Auth:Client_Id"];
                 microsoftOptions.ClientSecret = configuration["Microsoft_Auth:Client_Secret"];
                 microsoftOptions.CallbackPath = "/dashboard/en/signin-microsoft";
-            });
+                var redirect = microsoftOptions.Events.OnRedirectToAuthorizationEndpoint;
 
-            
+                if (_env.IsProduction())
+                {
+                    microsoftOptions.Events.OnRedirectToAuthorizationEndpoint = async context =>
+                    {
+                        context.RedirectUri = context.RedirectUri.Replace("http%3A%2F%2F", "https%3A%2F%2F");
+                        await redirect(context);
+                    };
+                }            
+            }); 
         }
 
         public static void AddAuthorizationService(this IServiceCollection services)

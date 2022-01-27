@@ -44,7 +44,7 @@ namespace WebApi
             services.AddPersistenceServices(_configuration);
             services.AddUtilitiesServices(_configuration);         
             services.AddCorsOriginService(_configuration);
-            services.AddAuthenticationService(_configuration);
+            services.AddAuthenticationService(_configuration, _env);
             services.AddAuthorizationService();
 
             services.AddIdentity<AppUser, AppRole>(options =>
@@ -72,24 +72,11 @@ namespace WebApi
                 o.ExpireTimeSpan = TimeSpan.FromDays(1);
                
             });
-
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
-                              ForwardedHeaders.XForwardedProto;
-                // Only loopback proxies are allowed by default.
-                // Clear that restriction because forwarders are enabled by explicit
-                // configuration.
-                options.KnownNetworks.Clear();
-                options.KnownProxies.Clear();
-            });
         }
 
         public void Configure(IApplicationBuilder app, IIdentityService identityService)
         {
             AddUsers.SeedData(identityService).GetAwaiter().GetResult();
-
-            app.UseForwardedHeaders();
 
             app.UseRequestLocalization();
 
