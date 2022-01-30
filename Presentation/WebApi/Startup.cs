@@ -69,7 +69,7 @@ namespace WebApi
                 o.LoginPath = new PathString("/dashboard/en/Home/Login");
                 o.AccessDeniedPath = new PathString("/dashboard/en/Home/AccessDenied");
                 o.LogoutPath = new PathString("/dashboard/en/Home/Logout");
-                o.ExpireTimeSpan = TimeSpan.FromDays(1);
+                o.ExpireTimeSpan = TimeSpan.FromDays(10);
                
             });
 
