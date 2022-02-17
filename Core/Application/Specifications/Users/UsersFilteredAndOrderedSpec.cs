@@ -21,8 +21,7 @@ namespace Application.Specifications.Users
                                 user.Name.First.ToLower().Contains(name.ToLower()) ||
                                 user.Name.Last.ToLower().Contains(name.ToLower()) ||
                                 user.Email.ToLower().Contains(name.ToLower())) &&
-                                (!role.HasValue || user.UserRoles.Any(r => r.RoleId == role.Value)) &&
-                                (user.UserRoles.All(r => r.Role.Alias != DefaultRoles.USER.ToString())))
+                                (!role.HasValue || user.UserRoles.Any(r => r.RoleId == role.Value)))
                  .Include(user => user.UserRoles)
                  .Include("UserRoles.Role")
                  .Include(user => user.Logins)

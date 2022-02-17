@@ -102,7 +102,21 @@ namespace Application.Features.UserAccount.Commands
                 }
                 else
                 {
-                    if(!(await _identityService.IsUserInRole(user, DefaultRoles.USER.ToString())) ||
+                    var userHasProviderId = user.Logins.Any();
+
+                    if (!userHasProviderId)
+                    {
+                        user.Logins.Add(new AppUserLogin
+                        {
+                            LoginProvider = KeyValueConstants.MicrosoftLoginProviderName,
+                            ProviderDisplayName = KeyValueConstants.MicrosoftLoginProviderName,
+                            ProviderKey = request.login_provider_id
+                        });
+
+                        await _uow.CompleteAsync();
+                    }
+
+                    if (!(await _identityService.IsUserInRole(user, DefaultRoles.USER.ToString())) ||
                        !user.Logins.Any(a => a.ProviderKey == request.login_provider_id))
                         throw new AppCustomException(ErrorStatusCodes.UnAuthorized,
                             new List<Tuple<string, string>> { new Tuple<string, string>(nameof(request.email), ResourceKeys.NotAllowedUser) });

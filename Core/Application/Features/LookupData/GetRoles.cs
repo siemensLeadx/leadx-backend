@@ -36,7 +36,6 @@ namespace Application.Features.LookupData
             {
                 var result = (await _uow.Repository<AppRole>()
                     .ListAsync())
-                    .Where(role => role.Alias != DefaultRoles.USER.ToString())
                     .Select(b => new LookupWithGuidResponseDTO
                     {
                         id = b.Id,
