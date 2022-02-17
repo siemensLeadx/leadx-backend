@@ -79,5 +79,6 @@ namespace Helpers.Resources
         public const string Sector = "SECTOR";
         public const string City = "CITY";
         public const string SetApprovedBeforePromoted = "SET_APPROVED_BEFORE_PROMOTED";
+        public const string CanNotDeleteUserWithLeads = "CAN_NOT_DELETE_USER_WITH_LEADS";
     }
 }

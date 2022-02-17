@@ -342,4 +342,7 @@
   <data name="SET_APPROVED_BEFORE_PROMOTED" xml:space="preserve">
     <value>لا يمكن ترقية الفرصة المحتملة قبل الموافقة</value>
   </data>
+  <data name="CAN_NOT_DELETE_USER_WITH_LEADS" xml:space="preserve">
+    <value>لا يمكن حذف المستخدم لأن لديه مبادارات</value>
+  </data>
 </root>

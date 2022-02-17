@@ -45,8 +45,12 @@ namespace Application.Features.UserAccount.Commands
                 if (user == null)
                     return Result.Fail(_localizer.Get(ResourceKeys.UserNotFound));
 
+                if (user.Leads.Any())
+                    return Result.Fail(_localizer.Get(ResourceKeys.CanNotDeleteUserWithLeads));
+
                 user.IsDeleted = true;
                 _uow.Repository<AppUserRole>().RemoveRange(user.UserRoles);
+                _uow.Repository<AppUserLogin>().RemoveRange(user.Logins);
                 _uow.Repository<AppUser>().Remove(user);
 
                 await _uow.CompleteAsync();
