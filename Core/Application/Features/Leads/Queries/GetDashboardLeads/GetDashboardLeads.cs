@@ -5,6 +5,7 @@ using Domain.Enums;
 using Helpers.Interfaces;
 using Helpers.Models;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,11 +19,13 @@ namespace Application.Features.Leads.Queries.GetDashboardLeads
             public LeadStatuses? status { get; }
             public Regions? region { get; }
             public Sectors? sector { get; }
+            public DateTime? from { get; }
+            public DateTime? to { get; }
             public int page_number { get; }
             public int page_size { get; }
 
             public Query(int page_number, int page_size, string name,
-                LeadStatuses? status, Regions? region, Sectors? sector)
+                LeadStatuses? status, Regions? region, Sectors? sector, DateTime? from, DateTime? to)
             {
                 this.page_number = page_number;
                 this.page_size = page_size;
@@ -30,6 +33,8 @@ namespace Application.Features.Leads.Queries.GetDashboardLeads
                 this.status = status;
                 this.region = region;
                 this.sector = sector;
+                this.from = from;
+                this.to = to;
             }
         }
 
@@ -51,7 +56,7 @@ namespace Application.Features.Leads.Queries.GetDashboardLeads
                 var result = _uow.Repository<Lead>()
                     .PaginatedList(
                     new DashboardLeadsOrderedByCreationDateSpec(_localizer.CurrentLangWithCountry,
-                        request.name, request.status, request.region, request.sector),
+                        request.name, request.status, request.region, request.sector, request.from, request.to),
                     request.page_number,
                     request.page_size);
 

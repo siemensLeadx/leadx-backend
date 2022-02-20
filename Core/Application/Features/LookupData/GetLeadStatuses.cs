@@ -34,7 +34,9 @@ namespace Application.Features.LookupData
             public async Task<Result<IEnumerable<LookupResponseDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var result = (await _uow.Repository<LeadStatus>()
-                    .ListAsync()).Select(b => new LookupResponseDTO
+                    .ListAsync())
+                    .Where(status => status.Id != Domain.Enums.LeadStatuses.Promoted)
+                    .Select(b => new LookupResponseDTO
                     {
                         id = (int)b.Id,
                         name = _localizer.CurrentLangWithCountry.Contains(KeyValueConstants.Arabic) ? b.NameAr : b.NameEn

@@ -55,7 +55,7 @@ namespace Application.Specifications.Leads
             }
             else if (lead.CurrentLeadStatusId == LeadStatuses.Ordered)
             {
-                return (int)lead.OrderedPrize;
+                return (int)lead.OrderedPrize/2;
             }
             else
                 return null;

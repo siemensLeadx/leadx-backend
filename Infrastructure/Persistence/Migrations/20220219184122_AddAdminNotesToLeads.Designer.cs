@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220219184122_AddAdminNotesToLeads")]
+    partial class AddAdminNotesToLeads
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -810,12 +812,6 @@ namespace Persistence.Migrations
                             Id = 4,
                             NameAr = "الشمالية",
                             NameEn = "Northern"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            NameAr = "الوسطى",
-                            NameEn = "Central"
                         });
                 });
 
@@ -923,84 +919,84 @@ namespace Persistence.Migrations
                             RewardClassId = 1,
                             RewardCriteriaId = 1,
                             LeadOnlyPrize = 1500m,
-                            LeadWithPOPrize = 1500m
+                            LeadWithPOPrize = 3000m
                         },
                         new
                         {
                             RewardClassId = 1,
                             RewardCriteriaId = 2,
                             LeadOnlyPrize = 2000m,
-                            LeadWithPOPrize = 2000m
+                            LeadWithPOPrize = 4000m
                         },
                         new
                         {
                             RewardClassId = 1,
                             RewardCriteriaId = 3,
                             LeadOnlyPrize = 2500m,
-                            LeadWithPOPrize = 2500m
+                            LeadWithPOPrize = 5000m
                         },
                         new
                         {
                             RewardClassId = 1,
                             RewardCriteriaId = 4,
                             LeadOnlyPrize = 3000m,
-                            LeadWithPOPrize = 3000m
+                            LeadWithPOPrize = 6000m
                         },
                         new
                         {
                             RewardClassId = 2,
                             RewardCriteriaId = 1,
                             LeadOnlyPrize = 1000m,
-                            LeadWithPOPrize = 1000m
+                            LeadWithPOPrize = 2000m
                         },
                         new
                         {
                             RewardClassId = 2,
                             RewardCriteriaId = 2,
                             LeadOnlyPrize = 1500m,
-                            LeadWithPOPrize = 1500m
+                            LeadWithPOPrize = 3000m
                         },
                         new
                         {
                             RewardClassId = 2,
                             RewardCriteriaId = 3,
                             LeadOnlyPrize = 2000m,
-                            LeadWithPOPrize = 2000m
+                            LeadWithPOPrize = 4000m
                         },
                         new
                         {
                             RewardClassId = 2,
                             RewardCriteriaId = 4,
                             LeadOnlyPrize = 2500m,
-                            LeadWithPOPrize = 2500m
+                            LeadWithPOPrize = 5000m
                         },
                         new
                         {
                             RewardClassId = 3,
                             RewardCriteriaId = 1,
                             LeadOnlyPrize = 500m,
-                            LeadWithPOPrize = 500m
+                            LeadWithPOPrize = 1000m
                         },
                         new
                         {
                             RewardClassId = 3,
                             RewardCriteriaId = 2,
                             LeadOnlyPrize = 1000m,
-                            LeadWithPOPrize = 1000m
+                            LeadWithPOPrize = 2000m
                         },
                         new
                         {
                             RewardClassId = 3,
                             RewardCriteriaId = 3,
                             LeadOnlyPrize = 1500m,
-                            LeadWithPOPrize = 1500m
+                            LeadWithPOPrize = 3000m
                         },
                         new
                         {
                             RewardClassId = 3,
                             RewardCriteriaId = 4,
                             LeadOnlyPrize = 2000m,
-                            LeadWithPOPrize = 2000m
+                            LeadWithPOPrize = 4000m
                         });
                 });
 

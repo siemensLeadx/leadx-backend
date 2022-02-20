@@ -18,7 +18,8 @@ namespace Persistence.EntitiesConfiguration
                 new RegionArea { Id = Regions.Eastern, NameEn = "Eastern", NameAr = "الشرقية" },
                 new RegionArea { Id = Regions.Western, NameEn = "Western", NameAr = "الغربية" },
                 new RegionArea { Id = Regions.Southern, NameEn = "Southern", NameAr = "الجنوبية" },
-                new RegionArea { Id = Regions.Northern, NameEn = "Northern", NameAr = "الشمالية" });
-            }
+                new RegionArea { Id = Regions.Northern, NameEn = "Northern", NameAr = "الشمالية" },
+                new RegionArea { Id = Regions.Central, NameEn = "Central", NameAr = "الوسطى" });
+        }
     }
 }

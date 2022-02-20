@@ -5,7 +5,9 @@ using Application.Features.LookupData;
 using Domain.Enums;
 using Helpers.Constants;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using WebApi.Services;
 using WebApi.ViewModels;
@@ -20,14 +22,16 @@ namespace WebApi.Controllers.AdminDashboard
             [FromQuery] string name,
             [FromQuery] LeadStatuses? status,
             [FromQuery] Regions? region,
-            [FromQuery] Sectors? sector)
+            [FromQuery] Sectors? sector,
+            [FromQuery] DateTime? from,
+            [FromQuery] DateTime? to)
         {
             var statusLookup = await Mediator.Send(new GetLeadStatuses.Query());
             var regionLookup = await Mediator.Send(new GetRegions.Query());
             var sectorLookup = await Mediator.Send(new GetSectors.Query());
 
             var result = await Mediator.Send(new GetDashboardLeads.Query(page_number, 10, name,
-                status, region, sector));
+                status, region, sector, from, to));
 
             ViewBag.CurrentFilter = name;
             ViewBag.statuses = statusLookup.Data;
@@ -40,6 +44,8 @@ namespace WebApi.Controllers.AdminDashboard
                 Status = status,
                 Region = region,
                 Sector = sector,
+                From = from,
+                To = to
             };
 
             return View(model);
@@ -97,6 +103,16 @@ namespace WebApi.Controllers.AdminDashboard
         {
             var result = await Mediator.Send(new SetLeadReward.Command(model.lead_id,
                 model.reward_class_id, model.reward_criteria_id));
+
+            return Json(result);
+        }
+
+        [Authorize(Policy = KeyValueConstants.AdminPolicy)]
+        [HttpPost]
+        public async Task<IActionResult> AddAdminNotes(AddAdminNotesVM model)
+        {
+            var result = await Mediator.Send(new AddAdminNotes.Command(model.lead_id,
+                model.admin_notes));
 
             return Json(result);
         }

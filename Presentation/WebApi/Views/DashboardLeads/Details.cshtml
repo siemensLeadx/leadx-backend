@@ -44,6 +44,16 @@
             font-size: 1.5rem;
             margin-bottom: 20px;
         }
+
+        .nicEdit-selected{
+            outline: none;
+        }
+
+        .editor-style{
+            border: solid #e3e3e3;
+            padding: 5px;
+            border-top: none;
+        }
     </style>
 }
 
@@ -244,7 +254,7 @@
                     <hr>
                 </div>
                 <div>
-                    <p class="label">Business opportunity Type </p>
+                    <p class="label">Business Opportunity Type </p>
                     <p class="lead-data">@Model.Data.business_opportunity_type</p>
                     <hr>
                 </div>
@@ -254,7 +264,7 @@
                     <hr>
                 </div>
                 <div>
-                    <p class="label">Date Need System</p>
+                    <p class="label">System Delivery Date</p>
                     <p id="dateNeedSystem" class="lead-data">@Model.Data.customer_due_date</p>
                     <hr>
                 </div>
@@ -283,15 +293,66 @@
                 }
             </div>
         </div>
+
+        <h2>Notes</h2>
+        <div class="card">
+            <!-- Card body -->
+            <div class="card-body">
+                <div id="adminNotesView">
+                    <div id="adminNotesText">
+                        @Html.Raw(@Model.Data.admin_notes)
+                    </div>
+                    <br />
+                    <p style="text-align: right">
+                        <button id="editAdminNotesBtn" class="btn btn-primary" onclick="editAdminNotes()">Edit</button>
+                    </p>
+                </div>
+                <div id="adminNotesEdit">
+                    <div id="adminNotesPanel">
+                    </div>
+                    <div id="adminNotesInstance">
+                        @Html.Raw(@Model.Data.admin_notes)
+                    </div>
+                    <br />
+                    <p style="text-align: right">
+                        <button id="saveAdminNotesBtn" class="btn btn-primary" onclick="saveAdminNotes()">Save</button>
+                        <button id="saveAdminNotesBtnLoader" class="btn btn-primary" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        </button>
+                    </p>
+                </div>
+                
+            </div>
+        </div>
     </div>
+
+
+
 </div>
 
 @section Scripts{
+    <script type="text/javascript" src="~/dashboard/lib/text-editor/nicEdit.js"></script>
+<script type="text/javascript">
+bkLib.onDomLoaded(function() {
+	 bkLib.onDomLoaded(function() {
+                var adminNotesEditor = new nicEditor({
+                    buttonList : ['bold','italic','underline','strikeThrough','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','forecolor']
+                });
+
+                
+                  adminNotesEditor.setPanel('adminNotesPanel');
+                  adminNotesEditor.addInstance('adminNotesInstance');
+            });
+});
+</script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#applyStatusLoader").hide();
             $("#applyRewardLoader").hide();
+            $("#saveAdminNotesBtnLoader").hide();
             $("#notesValidation").hide();
+            $("#adminNotesEdit").hide();
 
             var currentStatus = @((int)Model.Data.lead_status_id);
 
@@ -401,6 +462,48 @@
             var t = a.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             var time = date + ' ' + month + ' ' + year + ', ' + t;
             return time;
+        }
+
+        function editAdminNotes(){
+            $("#adminNotesInstance").addClass("editor-style");
+            $("#adminNotesEdit").show();
+            $("#adminNotesView").hide();
+        }
+
+        function saveAdminNotes(){
+            var adminNotes = $("#adminNotesInstance").html();
+            var data = {
+                "lead_id": $("#lead_id").val(),
+                "admin_notes": adminNotes
+            };
+
+            $("#saveAdminNotesBtnLoader").show();
+            $("#saveAdminNotesBtn").hide();
+
+             $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddAdminNotes", "DashboardLeads")',
+                data: data,
+                success: function (result) {
+                    if (result.is_success) {
+                        toastr.success(result.message);
+                    } else {
+                        toastr.error(result.message);
+                    }
+
+                    $("#adminNotesText").html(adminNotes);
+
+                    $("#adminNotesEdit").hide();
+                    $("#adminNotesView").show();
+                    $("#saveAdminNotesBtnLoader").hide();
+                    $("#saveAdminNotesBtn").show();
+                },
+                error: function (result) {
+                    $("#saveAdminNotesBtn").show();
+                    $("#saveAdminNotesBtnLoader").hide();
+                    toastr.error("please try again or contact administrator", "An error has occurred");
+                }
+            });
         }
     </script>
  }

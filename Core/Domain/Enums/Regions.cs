@@ -12,5 +12,6 @@ namespace Domain.Enums
         Western = 2,
         Southern = 3,
         Northern = 4,
+        Central = 5,
     }
 }

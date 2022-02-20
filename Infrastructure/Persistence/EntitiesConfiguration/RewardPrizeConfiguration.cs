@@ -21,18 +21,18 @@ namespace Persistence.EntitiesConfiguration
                 .HasForeignKey(p => p.RewardCriteriaId);
 
             builder.HasData(
-                new RewardPrize { RewardClassId = 1, RewardCriteriaId = 1, LeadOnlyPrize = 1500, LeadWithPOPrize = 3000 },
-                new RewardPrize { RewardClassId = 1, RewardCriteriaId = 2, LeadOnlyPrize = 2000, LeadWithPOPrize = 4000 },
-                new RewardPrize { RewardClassId = 1, RewardCriteriaId = 3, LeadOnlyPrize = 2500, LeadWithPOPrize = 5000 },
-                new RewardPrize { RewardClassId = 1, RewardCriteriaId = 4, LeadOnlyPrize = 3000, LeadWithPOPrize = 6000 },
-                new RewardPrize { RewardClassId = 2, RewardCriteriaId = 1, LeadOnlyPrize = 1000, LeadWithPOPrize = 2000 },
-                new RewardPrize { RewardClassId = 2, RewardCriteriaId = 2, LeadOnlyPrize = 1500, LeadWithPOPrize = 3000 },
-                new RewardPrize { RewardClassId = 2, RewardCriteriaId = 3, LeadOnlyPrize = 2000, LeadWithPOPrize = 4000 },
-                new RewardPrize { RewardClassId = 2, RewardCriteriaId = 4, LeadOnlyPrize = 2500, LeadWithPOPrize = 5000 },
-                new RewardPrize { RewardClassId = 3, RewardCriteriaId = 1, LeadOnlyPrize = 500, LeadWithPOPrize = 1000 },
-                new RewardPrize { RewardClassId = 3, RewardCriteriaId = 2, LeadOnlyPrize = 1000, LeadWithPOPrize = 2000 },
-                new RewardPrize { RewardClassId = 3, RewardCriteriaId = 3, LeadOnlyPrize = 1500, LeadWithPOPrize = 3000 },
-                new RewardPrize { RewardClassId = 3, RewardCriteriaId = 4, LeadOnlyPrize = 2000, LeadWithPOPrize = 4000 });
+                new RewardPrize { RewardClassId = 1, RewardCriteriaId = 1, LeadOnlyPrize = 1500, LeadWithPOPrize = 1500 },
+                new RewardPrize { RewardClassId = 1, RewardCriteriaId = 2, LeadOnlyPrize = 2000, LeadWithPOPrize = 2000 },
+                new RewardPrize { RewardClassId = 1, RewardCriteriaId = 3, LeadOnlyPrize = 2500, LeadWithPOPrize = 2500 },
+                new RewardPrize { RewardClassId = 1, RewardCriteriaId = 4, LeadOnlyPrize = 3000, LeadWithPOPrize = 3000 },
+                new RewardPrize { RewardClassId = 2, RewardCriteriaId = 1, LeadOnlyPrize = 1000, LeadWithPOPrize = 1000 },
+                new RewardPrize { RewardClassId = 2, RewardCriteriaId = 2, LeadOnlyPrize = 1500, LeadWithPOPrize = 1500 },
+                new RewardPrize { RewardClassId = 2, RewardCriteriaId = 3, LeadOnlyPrize = 2000, LeadWithPOPrize = 2000 },
+                new RewardPrize { RewardClassId = 2, RewardCriteriaId = 4, LeadOnlyPrize = 2500, LeadWithPOPrize = 2500 },
+                new RewardPrize { RewardClassId = 3, RewardCriteriaId = 1, LeadOnlyPrize = 500, LeadWithPOPrize = 500 },
+                new RewardPrize { RewardClassId = 3, RewardCriteriaId = 2, LeadOnlyPrize = 1000, LeadWithPOPrize = 1000 },
+                new RewardPrize { RewardClassId = 3, RewardCriteriaId = 3, LeadOnlyPrize = 1500, LeadWithPOPrize = 1500 },
+                new RewardPrize { RewardClassId = 3, RewardCriteriaId = 4, LeadOnlyPrize = 2000, LeadWithPOPrize = 2000 });
         }
     }
 }

@@ -13,6 +13,8 @@ namespace WebApi.ViewModels
         public LeadStatuses? Status { get; set; }
         public Regions? Region { get; set; }
         public Sectors? Sector { get; set; }
+        public DateTime? From { get; set; }
+        public DateTime? To { get; set; }
         public PaginatedResult<DashboardLeadsResponseDTO> ListWithPagination { get; set; }
     }
 }

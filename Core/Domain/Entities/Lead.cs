@@ -42,6 +42,7 @@ namespace Domain.Entities
         public virtual ICollection<LeadNeed> LeadNeeds { get; set; }
         public virtual ICollection<LeadStatusHistory> StatusHistory { get; private set; }
         public bool NotifyUser { get; private set; }
+        public string AdminNotes { get; set; }
 
         public void ChangeStatus(LeadStatuses newStatus, Guid userId, string notes = null)
         {

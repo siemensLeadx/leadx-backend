@@ -28,5 +28,6 @@ namespace Application.Features.Leads.Queries.GetDashboardLeadDetails
         public string reward_class { get; set; }
         public int? reward_criteria_id { get; set; }
         public string reward_criteria { get; set; }
+        public string admin_notes { get; set; }
     }
 }

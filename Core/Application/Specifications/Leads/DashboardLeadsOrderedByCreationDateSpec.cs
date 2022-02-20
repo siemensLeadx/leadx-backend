@@ -4,6 +4,7 @@ using Domain.Enums;
 using Helpers.Classes;
 using Helpers.Constants;
 using Helpers.Extensions;
+using System;
 using System.Linq;
 
 namespace Application.Specifications.Leads
@@ -11,14 +12,16 @@ namespace Application.Specifications.Leads
     public class DashboardLeadsOrderedByCreationDateSpec : Specification<Lead, DashboardLeadsResponseDTO>
     {
         public DashboardLeadsOrderedByCreationDateSpec(string lang, string name,
-            LeadStatuses? status, Regions? region, Sectors? sector)
+            LeadStatuses? status, Regions? region, Sectors? sector, DateTime? from, DateTime? to)
         {
             Query.Where(lead => (string.IsNullOrWhiteSpace(name) || 
                                  lead.LeadName.Contains(name) || 
                                  lead.User.Email.Contains(name)) &&
                                 (!status.HasValue || lead.CurrentLeadStatusId == status.Value) &&
                                 (!region.HasValue || lead.RegionId == region.Value) &&
-                                (!sector.HasValue || lead.SectorId == sector.Value))
+                                (!sector.HasValue || lead.SectorId == sector.Value) &&
+                                (!from.HasValue || lead.CreatedOn.Date >= from.Value.Date) &&
+                                (!to.HasValue || lead.CreatedOn.Date <= to.Value.Date))
                 .OrderByDescending(lead => lead.CreatedOn);
 
             Query.Select(lead => new DashboardLeadsResponseDTO

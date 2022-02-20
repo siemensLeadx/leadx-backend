@@ -4,6 +4,7 @@ using Helpers.Classes;
 using Helpers.Constants;
 using Helpers.Extensions;
 using System.Linq;
+using System.Net;
 
 namespace Application.Specifications.Leads
 {
@@ -44,7 +45,8 @@ namespace Application.Specifications.Leads
                 reward_class_id = lead.RewardClassId,
                 reward_class = lead.RewardClassId.HasValue ? SetRewardClassName(lead, lang) : null,
                 reward_criteria_id = lead.RewardCriteriaId,
-                reward_criteria = lead.RewardCriteriaId.HasValue ? lead.RewardCriteria.ToCustomStringFormat(lang) : null
+                reward_criteria = lead.RewardCriteriaId.HasValue ? lead.RewardCriteria.ToCustomStringFormat(lang) : null,
+                admin_notes = lead.AdminNotes
             });
         }
 
