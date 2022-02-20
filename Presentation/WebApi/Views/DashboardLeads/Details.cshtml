@@ -302,27 +302,32 @@
                     <div id="adminNotesText">
                         @Html.Raw(@Model.Data.admin_notes)
                     </div>
-                    <br />
-                    <p style="text-align: right">
-                        <button id="editAdminNotesBtn" class="btn btn-primary" onclick="editAdminNotes()">Edit</button>
-                    </p>
+                    @if (await _identityService.IsUserInRole(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value, DefaultRoles.ADMIN.ToString()))
+                    {
+                        <br />
+                        <p style="text-align: right">
+                            <button id="editAdminNotesBtn" class="btn btn-primary" onclick="editAdminNotes()">Edit</button>
+                        </p>
+                    }
                 </div>
-                <div id="adminNotesEdit">
-                    <div id="adminNotesPanel">
+                @if (await _identityService.IsUserInRole(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value, DefaultRoles.ADMIN.ToString()))
+                {
+                    <div id="adminNotesEdit">
+                        <div id="adminNotesPanel">
+                        </div>
+                        <div id="adminNotesInstance">
+                            @Html.Raw(@Model.Data.admin_notes)
+                        </div>
+                        <br />
+                        <p style="text-align: right">
+                            <button id="saveAdminNotesBtn" class="btn btn-primary" onclick="saveAdminNotes()">Save</button>
+                            <button id="saveAdminNotesBtnLoader" class="btn btn-primary" type="button" disabled>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            </button>
+                        </p>
                     </div>
-                    <div id="adminNotesInstance">
-                        @Html.Raw(@Model.Data.admin_notes)
-                    </div>
-                    <br />
-                    <p style="text-align: right">
-                        <button id="saveAdminNotesBtn" class="btn btn-primary" onclick="saveAdminNotes()">Save</button>
-                        <button id="saveAdminNotesBtnLoader" class="btn btn-primary" type="button" disabled>
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            <span class="sr-only">Loading...</span>
-                        </button>
-                    </p>
-                </div>
-                
+                }
             </div>
         </div>
     </div>
@@ -333,19 +338,22 @@
 
 @section Scripts{
     <script type="text/javascript" src="~/dashboard/lib/text-editor/nicEdit.js"></script>
-<script type="text/javascript">
-bkLib.onDomLoaded(function() {
-	 bkLib.onDomLoaded(function() {
-                var adminNotesEditor = new nicEditor({
-                    buttonList : ['bold','italic','underline','strikeThrough','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','forecolor']
-                });
+    @if (await _identityService.IsUserInRole(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value, DefaultRoles.ADMIN.ToString()))
+    {
+        <script type="text/javascript">
+        bkLib.onDomLoaded(function() {
+	         bkLib.onDomLoaded(function() {
+                        var adminNotesEditor = new nicEditor({
+                            buttonList : ['bold','italic','underline','strikeThrough','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','forecolor']
+                        });
 
                 
-                  adminNotesEditor.setPanel('adminNotesPanel');
-                  adminNotesEditor.addInstance('adminNotesInstance');
-            });
-});
-</script>
+                          adminNotesEditor.setPanel('adminNotesPanel');
+                          adminNotesEditor.addInstance('adminNotesInstance');
+                    });
+        });
+        </script>
+    }
     <script type="text/javascript">
         $(document).ready(function () {
             $("#applyStatusLoader").hide();
