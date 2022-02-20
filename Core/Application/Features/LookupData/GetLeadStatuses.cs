@@ -35,7 +35,6 @@ namespace Application.Features.LookupData
             {
                 var result = (await _uow.Repository<LeadStatus>()
                     .ListAsync())
-                    .Where(status => status.Id != Domain.Enums.LeadStatuses.Promoted)
                     .Select(b => new LookupResponseDTO
                     {
                         id = (int)b.Id,

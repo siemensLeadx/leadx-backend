@@ -4,7 +4,6 @@
     {
         New = 1,
         Verified = 2,
-        Confirmed = 3,
         Approved = 4,
         Rejected = 5,
         Promoted = 6,
