@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Mail;
+using Utilities.Services;
 
 namespace Utilities
 {
@@ -28,6 +29,7 @@ namespace Utilities
             services.AddScoped<IPhoneValidator, PhoneValidator>();
             services.AddScoped<IApplicationLocalization, ApplicationLocalization>();
             services.AddScoped<IFirebaseMessageSender, FirebaseMessageSender>();
+            services.AddSingleton<IExcelOperations, ExcelOperations>();
         }
     }
 }

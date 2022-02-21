@@ -2,12 +2,15 @@
 using Application.Features.Leads.Queries.GetDashboardLeadDetails;
 using Application.Features.Leads.Queries.GetDashboardLeads;
 using Application.Features.LookupData;
+using Application.Interfaces;
 using Domain.Enums;
 using Helpers.Constants;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using WebApi.Services;
 using WebApi.ViewModels;
@@ -17,6 +20,16 @@ namespace WebApi.Controllers.AdminDashboard
     [Authorize(Policy = KeyValueConstants.HrPolicy)]
     public class DashboardLeadsController : BaseMVCController
     {
+        private readonly IExcelOperations _excelOperations;
+        private readonly IWebHostEnvironment _env;
+
+        public DashboardLeadsController(IExcelOperations excelOperations,
+            IWebHostEnvironment env )
+        {
+            _excelOperations = excelOperations;
+            _env = env;
+        }
+
         [HttpGet]
         public async Task<IActionResult> List([FromQuery] int page_number,
             [FromQuery] string name,
@@ -49,6 +62,35 @@ namespace WebApi.Controllers.AdminDashboard
             };
 
             return View(model);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ListToExcel(
+            [FromQuery] string name,
+            [FromQuery] LeadStatuses? status,
+            [FromQuery] Regions? region,
+            [FromQuery] Sectors? sector,
+            [FromQuery] DateTime? from,
+            [FromQuery] DateTime? to)
+        {
+            var result = await Mediator.Send(new Application.Features.Leads.Queries.GetDashboardLeadsForExcel.GetDashboardLeadsForExcel.Query(name,
+                status, region, sector, from, to));
+
+            var leadsExcelFile = Path.Combine(_env.WebRootPath, $"leads_{DateTime.Now.ToString("ddMMyyyyhhmmssfff")}.xlsx");
+
+            await _excelOperations.ExportExcel(result, leadsExcelFile, "leads");
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                using(FileStream fs = new FileStream(leadsExcelFile, FileMode.Open, FileAccess.Read))
+                {
+                    fs.CopyTo(stream);
+                }
+
+                System.IO.File.Delete(leadsExcelFile);
+                return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "leads.xlsx");
+            }
         }
 
         [HttpGet]

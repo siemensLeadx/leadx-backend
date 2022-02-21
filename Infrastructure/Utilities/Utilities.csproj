@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ExcelMapper" Version="5.2.352" />
     <PackageReference Include="FirebaseAdmin" Version="2.2.0" />
     <PackageReference Include="FluentEmail.Core" Version="3.0.0" />
     <PackageReference Include="FluentEmail.Razor" Version="3.0.0" />
