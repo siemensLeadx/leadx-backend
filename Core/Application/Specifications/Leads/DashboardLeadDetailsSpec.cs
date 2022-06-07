@@ -41,7 +41,7 @@ namespace Application.Specifications.Leads
                     .OrderByDescending(h => h.CreatedAt).FirstOrDefault().Notes,
                 devices = lead.LeadNeeds.Select(d => lang.Contains(KeyValueConstants.Arabic) ? 
                     d.NeededDevice.NameAr : d.NeededDevice.NameEn).ToArray(),
-                created_by = $"{lead.User.Name.First} {lead.User.Name.Last}",
+                created_by = $"{lead.User.Name.First} {lead.User.Name.Last}  ({lead.User.Email})",
                 reward_class_id = lead.RewardClassId,
                 reward_class = lead.RewardClassId.HasValue ? SetRewardClassName(lead, lang) : null,
                 reward_criteria_id = lead.RewardCriteriaId,
