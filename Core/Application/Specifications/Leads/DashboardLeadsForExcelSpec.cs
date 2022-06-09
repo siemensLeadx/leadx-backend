@@ -33,6 +33,9 @@ namespace Application.Specifications.Leads
                 hospital = lead.HospitalName,
                 created_on = lead.CreatedOn.ToString("dd/MM/yyyy"),
                 status = lang.Contains(KeyValueConstants.Arabic) ? lead.CurrentLeadStatus.NameAr : lead.CurrentLeadStatus.NameEn,
+                created_by = $"{lead.User.Name.First} {lead.User.Name.Last}  ({lead.User.Email})",
+                sector = lang.Contains(KeyValueConstants.Arabic) ? lead.Sector.NameAr : lead.Sector.NameEn,
+                region = lang.Contains(KeyValueConstants.Arabic) ? lead.RegionArea.NameAr : lead.RegionArea.NameEn
             });
         }
     }
